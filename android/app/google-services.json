@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "939944099980",
+    "project_id": "pc-gamer-service",
+    "storage_bucket": "pc-gamer-service.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939944099980:android:a2f162b10078cc4f7afba9",
+        "android_client_info": {
+          "package_name": "com.example.pc_gamer_service"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939944099980-p9iafjdlc1ler1rt225g6p0erh8h4akg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pc_gamer_service",
+            "certificate_hash": "f66bf4966054bed7a60ea0c5be521eb5406fff29"
+          }
+        },
+        {
+          "client_id": "939944099980-eckvq0beuaticlk8qdq5t1bbja2es3mi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAwIjtcwf-Eri20VgQAsxZyQFYhnkfkzI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939944099980-eckvq0beuaticlk8qdq5t1bbja2es3mi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "939944099980-oo2i8sm8jpvmgllrmecl258tus70llf2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pcGamerService"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

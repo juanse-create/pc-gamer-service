@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pc-gamer-service",
+          "appId": "1:939944099980:android:a2f162b10078cc4f7afba9",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pc-gamer-service",
+          "configurations": {
+            "android": "1:939944099980:android:a2f162b10078cc4f7afba9",
+            "ios": "1:939944099980:ios:2eff8cb377d7e1527afba9",
+            "macos": "1:939944099980:ios:2eff8cb377d7e1527afba9",
+            "web": "1:939944099980:web:6dc12dfe3a15a3b37afba9",
+            "windows": "1:939944099980:web:9c4864eca9f02ceb7afba9"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
