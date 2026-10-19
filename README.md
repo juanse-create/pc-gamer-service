@@ -1,17 +1,32 @@
-# pc_gamer_service
+# PC Gamer Service
 
-A new Flutter project.
+Aplicación móvil desarrollada en Flutter para gestionar el mantenimiento de equipos de cómputo, especialmente PCs Gamer.
 
-## Getting Started
+## Tecnologías utilizadas
 
-This project is a starting point for a Flutter application.
+- Flutter y Dart
+- Firebase Authentication
+- Cloud Firestore
+- Google Sign-In
+- Git y GitHub
 
-A few resources to get you started if this is your first Flutter project:
+## Roles del sistema
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+**Cliente:** registra equipos, solicita mantenimiento y consulta el estado de sus órdenes.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Técnico:** consulta las órdenes asignadas, registra diagnósticos y actualiza el estado del mantenimiento.
+
+**Administrador:** gestiona usuarios y técnicos, asigna órdenes y consulta estadísticas.
+
+## Control de versiones
+
+El proyecto utiliza las siguientes ramas:
+
+- `main`: versión estable.
+- `pruebas`: pruebas de cambios.
+- `integracion-pruebas`: integración y verificación.
+- `feature/*`: desarrollo de funcionalidades específicas.
+
+## Desarrollador
+
+Proyecto académico de desarrollo de aplicaciones móviles.
