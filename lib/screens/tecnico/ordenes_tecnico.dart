@@ -37,17 +37,11 @@ class _OrdenesTecnicoState extends State<OrdenesTecnico> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
   }
 
-  // ==========================================
-  // REGISTRAR DIAGNÓSTICO
-  // ==========================================
-
   Future<void> registrarDiagnostico(
     QueryDocumentSnapshot<Map<String, dynamic>> documento,
   ) async {
     final datos = documento.data();
 
-    // El controlador ahora pertenece al diálogo.
-    // Así evitamos eliminarlo antes de tiempo.
     final resultado = await showDialog<String>(
       context: context,
       builder: (dialogContext) {
@@ -103,10 +97,6 @@ class _OrdenesTecnicoState extends State<OrdenesTecnico> {
       }
     }
   }
-
-  // ==========================================
-  // ACTUALIZAR ESTADO
-  // ==========================================
 
   Future<void> actualizarEstado(
     QueryDocumentSnapshot<Map<String, dynamic>> documento,
@@ -195,10 +185,6 @@ class _OrdenesTecnicoState extends State<OrdenesTecnico> {
     }
   }
 
-  // ==========================================
-  // BOTONES SEGÚN EL MODO
-  // ==========================================
-
   Widget? botonAccion(QueryDocumentSnapshot<Map<String, dynamic>> documento) {
     final estado = documento.data()['estado']?.toString() ?? '';
 
@@ -250,10 +236,6 @@ class _OrdenesTecnicoState extends State<OrdenesTecnico> {
 
     return null;
   }
-
-  // ==========================================
-  // INTERFAZ PRINCIPAL
-  // ==========================================
 
   @override
   Widget build(BuildContext context) {
@@ -369,10 +351,6 @@ class _OrdenesTecnicoState extends State<OrdenesTecnico> {
     );
   }
 }
-
-// ==========================================
-// DIÁLOGO DE DIAGNÓSTICO
-// ==========================================
 
 class _DialogoDiagnostico extends StatefulWidget {
   final String ordenId;
