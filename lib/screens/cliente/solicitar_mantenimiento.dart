@@ -39,10 +39,6 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
   }
 
-  // ==========================================
-  // GUARDAR SOLICITUD
-  // ==========================================
-
   Future<void> guardarSolicitud() async {
     if (guardando) return;
 
@@ -81,21 +77,18 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
     try {
       final db = FirebaseFirestore.instance;
 
-      // Verificar que la PC existe y pertenece al cliente.
       final equipoDoc = await db.collection('equipos').doc(equipoId).get();
 
       if (!equipoDoc.exists || equipoDoc.data()?['clienteId'] != usuario.uid) {
         throw Exception('El equipo no existe o no pertenece a tu cuenta');
       }
 
-      // Buscar órdenes existentes de esta PC.
       final ordenesExistentes = await db
           .collection('ordenes')
           .where('clienteId', isEqualTo: usuario.uid)
           .where('equipoId', isEqualTo: equipoId)
           .get();
 
-      // Comprobar si existe una solicitud activa.
       final solicitudActiva = ordenesExistentes.docs.any((documento) {
         final estado = documento.data()['estado']?.toString() ?? '';
 
@@ -140,19 +133,11 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
     }
   }
 
-  // ==========================================
-  // LIBERAR RECURSOS
-  // ==========================================
-
   @override
   void dispose() {
     descripcion.dispose();
     super.dispose();
   }
-
-  // ==========================================
-  // INTERFAZ
-  // ==========================================
 
   @override
   Widget build(BuildContext context) {

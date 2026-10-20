@@ -30,10 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // ==========================================
-  // VALIDACIONES
-  // ==========================================
-
   String? _validarEmail(String? valor) {
     final email = (valor ?? '').trim();
 
@@ -57,10 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return null;
   }
-
-  // ==========================================
-  // MENSAJES
-  // ==========================================
 
   void _mostrarMensaje(String mensaje) {
     if (!mounted) return;
@@ -119,10 +111,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return 'No se pudo completar el inicio de sesión: $texto';
   }
 
-  // ==========================================
-  // INICIAR SESIÓN CON CORREO
-  // ==========================================
-
   Future<void> _iniciarSesion() async {
     if (_cargando) return;
 
@@ -146,10 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // ==========================================
-  // INICIAR SESIÓN CON GOOGLE
-  // ==========================================
-
   Future<void> _iniciarConGoogle() async {
     if (_cargando) return;
 
@@ -167,10 +151,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
-
-  // ==========================================
-  // VERIFICAR ROL
-  // ==========================================
 
   Future<void> _verificarUsuario() async {
     final perfil = await _authService.obtenerPerfilActual();
@@ -221,10 +201,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // ==========================================
-  // RECUPERAR CONTRASEÑA
-  // ==========================================
-
   Future<void> _recuperarPassword() async {
     if (_cargando) return;
 
@@ -253,10 +229,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
-
-  // ==========================================
-  // INTERFAZ
-  // ==========================================
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +267,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 30),
 
-                  // CORREO
                   TextFormField(
                     controller: _emailController,
                     enabled: !_cargando,
@@ -314,7 +285,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 16),
 
-                  // CONTRASEÑA
                   TextFormField(
                     controller: _passwordController,
                     enabled: !_cargando,
@@ -354,7 +324,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 12),
 
-                  // RECUPERAR CONTRASEÑA
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -368,7 +337,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 16),
 
-                  // INICIAR SESIÓN
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -393,7 +361,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 12),
 
-                  // GOOGLE
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
@@ -405,7 +372,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 20),
 
-                  // REGISTRO
                   TextButton(
                     onPressed: _cargando
                         ? null
