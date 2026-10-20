@@ -1,14 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-
-  // ==========================================
-  // VALIDAR PERFIL
-  // ==========================================
 
   Future<Map<String, dynamic>> _validarPerfil(User usuario) async {
     final documento = await _db.collection('usuarios').doc(usuario.uid).get();
@@ -37,10 +34,6 @@ class AuthService {
 
     return perfil;
   }
-
-  // ==========================================
-  // REGISTRAR CLIENTE
-  // ==========================================
 
   Future<UserCredential> registrarCliente({
     required String nombre,
@@ -80,21 +73,19 @@ class AuthService {
       });
 
       return credencial;
-    } catch (_) {
-      // Evitar dejar una cuenta sin perfil.
+    } catch (error) {
       try {
         await usuario.delete();
-      } catch (_) {
-        // Puede requerir recuperación administrativa.
+      } catch (errorEliminacion) {
+        debugPrint(
+          'No se pudo revertir el registro del usuario: '
+          '$errorEliminacion',
+        );
       }
 
       rethrow;
     }
   }
-
-  // ==========================================
-  // INICIAR SESIÓN CON CORREO
-  // ==========================================
 
   Future<UserCredential> iniciarSesion({
     required String email,
@@ -120,10 +111,6 @@ class AuthService {
       rethrow;
     }
   }
-
-  // ==========================================
-  // INICIAR SESIÓN CON GOOGLE
-  // ==========================================
 
   Future<UserCredential> iniciarSesionConGoogle() async {
     final googleSignIn = GoogleSignIn.instance;
@@ -152,7 +139,6 @@ class AuthService {
 
       final documento = await usuarioRef.get();
 
-      // Solo crear perfil si todavía no existe.
       if (!documento.exists) {
         await usuarioRef.set({
           'uid': usuario.uid,
@@ -164,7 +150,6 @@ class AuthService {
         });
       }
 
-      // Verificar que el usuario pueda acceder.
       await _validarPerfil(usuario);
 
       return userCredential;
@@ -173,10 +158,6 @@ class AuthService {
       rethrow;
     }
   }
-
-  // ==========================================
-  // CONSULTAR PERFIL ACTUAL
-  // ==========================================
 
   Future<Map<String, dynamic>?> obtenerPerfilActual() async {
     final usuario = _auth.currentUser;
@@ -187,10 +168,6 @@ class AuthService {
 
     return _validarPerfil(usuario);
   }
-
-  // ==========================================
-  // CERRAR SESIÓN
-  // ==========================================
 
   Future<void> cerrarSesion() async {
     await _auth.signOut();
