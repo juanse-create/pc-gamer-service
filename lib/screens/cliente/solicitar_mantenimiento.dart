@@ -77,6 +77,19 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
     try {
       final db = FirebaseFirestore.instance;
 
+      final clienteDoc = await db.collection('usuarios').doc(usuario.uid).get();
+
+      if (!clienteDoc.exists) {
+        throw Exception('No se encontró el perfil del cliente');
+      }
+
+      final nombreCliente =
+          clienteDoc.data()?['nombre']?.toString().trim() ?? '';
+
+      if (nombreCliente.isEmpty) {
+        throw Exception('El cliente no tiene un nombre registrado');
+      }
+
       final equipoDoc = await db.collection('equipos').doc(equipoId).get();
 
       if (!equipoDoc.exists || equipoDoc.data()?['clienteId'] != usuario.uid) {
@@ -104,9 +117,9 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
         return;
       }
 
-      // Crear nueva orden.
       await db.collection('ordenes').add({
         'clienteId': usuario.uid,
+        'nombreCliente': nombreCliente,
         'equipoId': equipoId,
         'nombreEquipo': equipoDoc.data()?['nombre'] ?? '',
         'tipoServicio': tipoServicio,
