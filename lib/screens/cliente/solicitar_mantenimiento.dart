@@ -132,7 +132,7 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
 
       if (!mounted) return;
 
-      mensaje('Solicitud creada correctamente en Firebase');
+      mensaje('Solicitud creada correctamente');
 
       Navigator.pop(context, true);
     } on FirebaseException catch (e) {
@@ -164,7 +164,11 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Solicitar mantenimiento')),
+      appBar: AppBar(
+        title: const Text('Solicitar mantenimiento'),
+        backgroundColor: const Color(0xFF1E293B),
+        centerTitle: true,
+      ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
             .collection('equipos')
@@ -173,7 +177,13 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
-              child: Text('Error al cargar equipos: ${snapshot.error}'),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  'Error al cargar equipos: ${snapshot.error}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
             );
           }
 
@@ -184,7 +194,37 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
           final equipos = snapshot.data!.docs;
 
           if (equipos.isEmpty) {
-            return const Center(child: Text('Primero debes registrar una PC'));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.computer_outlined,
+                      size: 70,
+                      color: Colors.blueAccent,
+                    ),
+                    const SizedBox(height: 18),
+                    const Text(
+                      'No tienes equipos registrados',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Primero registra una PC para poder '
+                      'solicitar un servicio de mantenimiento.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
 
           final idsDisponibles = equipos.map((doc) => doc.id).toSet();
@@ -193,100 +233,362 @@ class _SolicitarMantenimientoState extends State<SolicitarMantenimiento> {
               ? equipoSeleccionado
               : null;
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Selecciona tu equipo',
-                  style: TextStyle(fontSize: 18),
-                ),
-
-                const SizedBox(height: 12),
-
-                DropdownButtonFormField<String>(
-                  key: ValueKey(seleccionActual),
-                  initialValue: seleccionActual,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: const Text('Seleccionar PC'),
-                  items: equipos.map((pc) {
-                    return DropdownMenuItem<String>(
-                      value: pc.id,
-                      child: Text(
-                        pc.data()['nombre']?.toString() ?? 'Equipo sin nombre',
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 650),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF2563EB),
+                              Color(0xFF1E40AF),
+                              Color(0xFF172554),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.build_circle_outlined,
+                              size: 65,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'Cuida tu PC Gamer',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Solicita un servicio de mantenimiento '
+                              'para mantener tu equipo en las mejores '
+                              'condiciones.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white70,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: guardando
-                      ? null
-                      : (valor) {
-                          setState(() {
-                            equipoSeleccionado = valor;
-                          });
-                        },
-                ),
 
-                const SizedBox(height: 25),
+                      const SizedBox(height: 24),
 
-                const Text('Tipo de servicio', style: TextStyle(fontSize: 18)),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E293B),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(Icons.computer, color: Colors.blueAccent),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    'Selecciona tu equipo',
+                                    style: TextStyle(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
 
-                const SizedBox(height: 12),
+                            const SizedBox(height: 10),
 
-                DropdownButtonFormField<String>(
-                  initialValue: tipoServicio,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                            const Text(
+                              'Elige la PC que necesita mantenimiento.',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white70,
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            DropdownButtonFormField<String>(
+                              key: ValueKey(seleccionActual),
+                              initialValue: seleccionActual,
+                              isExpanded: true,
+                              decoration: InputDecoration(
+                                labelText: 'Equipo registrado',
+                                prefixIcon: const Icon(
+                                  Icons.devices,
+                                  color: Color(0xFF60A5FA),
+                                ),
+                                filled: true,
+                                fillColor: const Color(0xFF0F172A),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              hint: const Text('Seleccionar PC'),
+                              items: equipos.map((pc) {
+                                return DropdownMenuItem<String>(
+                                  value: pc.id,
+                                  child: Text(
+                                    pc.data()['nombre']?.toString() ??
+                                        'Equipo sin nombre',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: guardando
+                                  ? null
+                                  : (valor) {
+                                      setState(() {
+                                        equipoSeleccionado = valor;
+                                      });
+                                    },
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E293B),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.build_outlined,
+                                  color: Colors.blueAccent,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    'Tipo de mantenimiento',
+                                    style: TextStyle(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            const Text(
+                              'Selecciona el servicio que necesitas.',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white70,
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            DropdownButtonFormField<String>(
+                              initialValue: tipoServicio,
+                              isExpanded: true,
+                              decoration: InputDecoration(
+                                labelText: 'Servicio',
+                                prefixIcon: const Icon(
+                                  Icons.handyman_outlined,
+                                  color: Color(0xFF60A5FA),
+                                ),
+                                filled: true,
+                                fillColor: const Color(0xFF0F172A),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              items: tipos.map((tipo) {
+                                return DropdownMenuItem<String>(
+                                  value: tipo,
+                                  child: Text(
+                                    tipo,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: guardando
+                                  ? null
+                                  : (valor) {
+                                      if (valor != null) {
+                                        setState(() {
+                                          tipoServicio = valor;
+                                        });
+                                      }
+                                    },
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E293B),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.description_outlined,
+                                  color: Colors.blueAccent,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    'Describe el problema',
+                                    style: TextStyle(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            const Text(
+                              'Explica qué ocurre con tu PC para '
+                              'ayudar al tecnico a identificar el problema.',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white70,
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            TextField(
+                              controller: descripcion,
+                              maxLines: 5,
+                              maxLength: 1000,
+                              enabled: !guardando,
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: InputDecoration(
+                                labelText: 'Descripción del problema',
+                                hintText:
+                                    'Ejemplo: Mi PC se apaga cuando juego '
+                                    'y presenta temperaturas altas.',
+                                alignLabelWithHint: true,
+                                filled: true,
+                                fillColor: const Color(0xFF0F172A),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E3A5F),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(
+                              0xFF3B82F6,
+                            ).withValues(alpha: 0.35),
+                          ),
+                        ),
+                        child: const Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(Icons.info_outline, color: Color(0xFF93C5FD)),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                'DespuEs de enviar tu solicitud, '
+                                'podras consultar su estado en '
+                                '"Mis órdenes". También podras '
+                                'cancelarla mientras siga pendiente.',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white70,
+                                  height: 1.5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      SizedBox(
+                        height: 58,
+                        child: ElevatedButton.icon(
+                          onPressed: guardando ? null : guardarSolicitud,
+                          icon: Icon(
+                            guardando
+                                ? Icons.hourglass_top
+                                : Icons.send_outlined,
+                          ),
+                          label: Text(
+                            guardando
+                                ? 'Enviando solicitud...'
+                                : 'Enviar solicitud',
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2563EB),
+                            foregroundColor: Colors.white,
+                            disabledBackgroundColor: const Color(0xFF334155),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      if (guardando) ...[
+                        const SizedBox(height: 20),
+                        const Center(child: CircularProgressIndicator()),
+                      ],
+
+                      const SizedBox(height: 25),
+                    ],
                   ),
-                  items: tipos.map((tipo) {
-                    return DropdownMenuItem<String>(
-                      value: tipo,
-                      child: Text(tipo),
-                    );
-                  }).toList(),
-                  onChanged: guardando
-                      ? null
-                      : (valor) {
-                          if (valor != null) {
-                            setState(() {
-                              tipoServicio = valor;
-                            });
-                          }
-                        },
                 ),
-
-                const SizedBox(height: 25),
-
-                TextField(
-                  controller: descripcion,
-                  maxLines: 4,
-                  maxLength: 1000,
-                  enabled: !guardando,
-                  decoration: const InputDecoration(
-                    labelText: 'Describe el problema',
-                    hintText: 'Ejemplo: La PC se apaga al jugar',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: guardando ? null : guardarSolicitud,
-                    icon: const Icon(Icons.save),
-                    label: Text(
-                      guardando ? 'Guardando...' : 'Enviar solicitud',
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(18),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           );
         },

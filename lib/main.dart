@@ -83,19 +83,6 @@ class HomeScreen extends StatelessWidget {
 
   List<Widget> _opcionesPorRol(BuildContext context) {
     switch (rol) {
-      case 'Cliente':
-        return [
-          _opcion(context, 'Mis equipos', Icons.devices, const MisEquipos()),
-          _opcion(context, 'Registrar PC', Icons.computer, const RegistrarPC()),
-          _opcion(
-            context,
-            'Solicitar mantenimiento',
-            Icons.build_circle,
-            const SolicitarMantenimiento(),
-          ),
-          _opcion(context, 'Mis órdenes', Icons.list_alt, const MisOrdenes()),
-        ];
-
       case 'Técnico':
         return [
           _opcion(
@@ -157,11 +144,274 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
+  Widget _tarjetaCliente(
+    BuildContext context, {
+    required String titulo,
+    required String descripcion,
+    required IconData icono,
+    required Color color,
+    required Widget pantalla,
+  }) {
+    return Material(
+      color: const Color(0xFF1E293B),
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () => _abrirPantalla(context, pantalla),
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: color.withValues(alpha: 0.25)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icono, color: color, size: 30),
+              ),
+
+              const Spacer(),
+
+              Text(
+                titulo,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              Text(
+                descripcion,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12, color: Colors.white70),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _panelCliente(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final anchoDisponible = constraints.maxWidth;
+
+        final columnas = anchoDisponible >= 700 ? 3 : 2;
+
+        return ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF1D4ED8),
+                    Color(0xFF1E40AF),
+                    Color(0xFF172554),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.sports_esports, size: 45, color: Colors.white),
+
+                  SizedBox(height: 18),
+
+                  Text(
+                    '¡Bienvenido a PC Gamer Service!',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  Text(
+                    'Administra tus equipos y solicita '
+                    'mantenimiento de forma rapida y sencilla.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            const Text(
+              '¿Qué necesitas hacer?',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 8),
+
+            const Text(
+              'Selecciona una opción para continuar',
+              style: TextStyle(fontSize: 14, color: Colors.white60),
+            ),
+
+            const SizedBox(height: 22),
+
+            Material(
+              color: const Color(0xFF2563EB),
+              borderRadius: BorderRadius.circular(20),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () =>
+                    _abrirPantalla(context, const SolicitarMantenimiento()),
+                child: Padding(
+                  padding: const EdgeInsets.all(22),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(
+                          Icons.build_circle,
+                          size: 38,
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Solicitar mantenimiento',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+
+                            SizedBox(height: 5),
+
+                            Text(
+                              'Solicita un servicio para tu PC',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            GridView.count(
+              crossAxisCount: columnas,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+              childAspectRatio: anchoDisponible >= 700 ? 1.5 : 0.95,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                _tarjetaCliente(
+                  context,
+                  titulo: 'Mis equipos',
+                  descripcion: 'Consulta tus PCs',
+                  icono: Icons.devices,
+                  color: Colors.cyanAccent,
+                  pantalla: const MisEquipos(),
+                ),
+
+                _tarjetaCliente(
+                  context,
+                  titulo: 'Registrar PC',
+                  descripcion: 'Agrega un equipo',
+                  icono: Icons.computer,
+                  color: Colors.greenAccent,
+                  pantalla: const RegistrarPC(),
+                ),
+
+                _tarjetaCliente(
+                  context,
+                  titulo: 'Mis órdenes',
+                  descripcion: 'Revisa tus solicitudes',
+                  icono: Icons.assignment,
+                  color: Colors.orangeAccent,
+                  pantalla: const MisOrdenes(),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 30),
+
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E293B),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.blueAccent),
+
+                  SizedBox(width: 12),
+
+                  Expanded(
+                    child: Text(
+                      'Manten tus equipos en buen estado '
+                      'con nuestros servicios de mantenimiento.',
+                      style: TextStyle(fontSize: 13, color: Colors.white70),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Panel de $rol'),
+        title: Text(rol == 'Cliente' ? 'PC Gamer Service' : 'Panel de $rol'),
         backgroundColor: const Color(0xFF1E293B),
         actions: [
           IconButton(
@@ -171,17 +421,25 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Text(
-            'Bienvenido, $rol',
-            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 25),
-          ..._opcionesPorRol(context),
-        ],
-      ),
+
+      body: rol == 'Cliente'
+          ? _panelCliente(context)
+          : ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                Text(
+                  'Bienvenido, $rol',
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                ..._opcionesPorRol(context),
+              ],
+            ),
     );
   }
 }
