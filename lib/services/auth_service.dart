@@ -47,8 +47,20 @@ class AuthService {
       throw Exception('Completa todos los campos.');
     }
 
-    if (password.length < 6) {
-      throw Exception('La contraseña debe tener al menos 6 caracteres.');
+    if (password.length < 8) {
+      throw Exception('La contraseña debe tener al menos 8 caracteres.');
+    }
+
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      throw Exception('La contraseña debe incluir una letra mayúscula.');
+    }
+
+    if (!RegExp(r'[a-z]').hasMatch(password)) {
+      throw Exception('La contraseña debe incluir una letra minúscula.');
+    }
+
+    if (!RegExp(r'[0-9]').hasMatch(password)) {
+      throw Exception('La contraseña debe incluir al menos un número.');
     }
 
     final credencial = await _auth.createUserWithEmailAndPassword(
@@ -84,7 +96,11 @@ class AuthService {
       rethrow;
     }
 
-    await _auth.signOut();
+    try {
+      await usuario.sendEmailVerification();
+    } finally {
+      await _auth.signOut();
+    }
 
     return credencial;
   }
@@ -106,7 +122,23 @@ class AuthService {
     }
 
     try {
-      await _validarPerfil(usuario);
+      await usuario.reload();
+
+      final usuarioActualizado = _auth.currentUser;
+
+      if (usuarioActualizado == null) {
+        throw Exception('No se pudo comprobar tu cuenta.');
+      }
+
+      if (!usuarioActualizado.emailVerified) {
+        throw Exception(
+          'Debes verificar tu correo electronico antes de iniciar sesion. '
+          'Revisa tu bandeja de entrada y spam.',
+        );
+      }
+
+      await _validarPerfil(usuarioActualizado);
+
       return credencial;
     } catch (_) {
       await _auth.signOut();
@@ -169,6 +201,40 @@ class AuthService {
     }
 
     return _validarPerfil(usuario);
+  }
+
+  Future<void> reenviarVerificacion({
+    required String email,
+    required String password,
+  }) async {
+    final credencial = await _auth.signInWithEmailAndPassword(
+      email: email.trim().toLowerCase(),
+      password: password,
+    );
+
+    try {
+      final usuario = credencial.user;
+
+      if (usuario == null) {
+        throw Exception('No se encontro el usuario.');
+      }
+
+      await usuario.reload();
+
+      final usuarioActualizado = _auth.currentUser;
+
+      if (usuarioActualizado == null) {
+        throw Exception('No se pudo comprobar tu cuenta.');
+      }
+
+      if (usuarioActualizado.emailVerified) {
+        throw Exception('Este correo ya esta verificado.');
+      }
+
+      await usuarioActualizado.sendEmailVerification();
+    } finally {
+      await _auth.signOut();
+    }
   }
 
   Future<void> cerrarSesion() async {
