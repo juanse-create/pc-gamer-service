@@ -303,6 +303,9 @@ class _OrdenesTecnicoState extends State<OrdenesTecnico> {
                     final documento = ordenes[index];
                     final orden = documento.data();
 
+                    final nombreCliente =
+                        orden['nombreCliente']?.toString().trim() ?? '';
+
                     final estado = orden['estado']?.toString() ?? 'Pendiente';
 
                     final diagnostico = orden['diagnostico']?.toString() ?? '';
@@ -324,6 +327,16 @@ class _OrdenesTecnicoState extends State<OrdenesTecnico> {
                               ),
                             ),
                             const SizedBox(height: 10),
+
+                            Text(
+                              'Cliente: ${nombreCliente.isEmpty ? 'No disponible' : nombreCliente}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+
+                            const SizedBox(height: 5),
+
                             Text('PC: ${orden['nombreEquipo'] ?? ''}'),
                             Text('Servicio: ${orden['tipoServicio'] ?? ''}'),
                             Text('Problema: ${orden['descripcion'] ?? ''}'),
