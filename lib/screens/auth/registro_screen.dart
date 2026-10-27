@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../services/auth_service.dart';
-import '../../main.dart' show HomeScreen;
+import 'login_screen.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -34,10 +34,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
     _confirmarController.dispose();
     super.dispose();
   }
-
-  // ==========================================
-  // VALIDACIONES
-  // ==========================================
 
   String? _validarNombre(String? valor) {
     final nombre = (valor ?? '').trim();
@@ -121,10 +117,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
     return null;
   }
 
-  // ==========================================
-  // MENSAJES
-  // ==========================================
-
   void _mostrarMensaje(String mensaje) {
     if (!mounted) return;
 
@@ -132,10 +124,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
       context,
     ).showSnackBar(SnackBar(content: Text(mensaje)));
   }
-
-  // ==========================================
-  // REGISTRAR CLIENTE
-  // ==========================================
 
   Future<void> _registrar() async {
     if (_cargando) return;
@@ -157,12 +145,18 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
       if (!mounted) return;
 
-      _mostrarMensaje('Cuenta creada correctamente');
-
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen(rol: 'Cliente')),
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
         (route) => false,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cuenta creada correctamente. Ahora inicia sesion.'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 4),
+        ),
       );
     } on FirebaseAuthException catch (e) {
       String mensaje;
@@ -208,10 +202,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
     }
   }
 
-  // ==========================================
-  // INTERFAZ
-  // ==========================================
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -253,7 +243,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
                   const SizedBox(height: 30),
 
-                  // NOMBRE
                   TextFormField(
                     controller: _nombreController,
                     enabled: !_cargando,
@@ -269,7 +258,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
                   const SizedBox(height: 12),
 
-                  // CORREO
                   TextFormField(
                     controller: _emailController,
                     enabled: !_cargando,
@@ -287,7 +275,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
                   const SizedBox(height: 12),
 
-                  // CONTRASEÑA
                   TextFormField(
                     controller: _passwordController,
                     enabled: !_cargando,
@@ -317,8 +304,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
                   ),
 
                   const SizedBox(height: 16),
-
-                  // CONFIRMAR CONTRASEÑA
                   TextFormField(
                     controller: _confirmarController,
                     enabled: !_cargando,
@@ -347,7 +332,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
                   const SizedBox(height: 28),
 
-                  // BOTÓN
                   ElevatedButton(
                     onPressed: _cargando ? null : _registrar,
                     style: ElevatedButton.styleFrom(
