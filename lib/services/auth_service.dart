@@ -71,8 +71,6 @@ class AuthService {
         'activo': true,
         'fechaRegistro': FieldValue.serverTimestamp(),
       });
-
-      return credencial;
     } catch (error) {
       try {
         await usuario.delete();
@@ -85,6 +83,10 @@ class AuthService {
 
       rethrow;
     }
+
+    await _auth.signOut();
+
+    return credencial;
   }
 
   Future<UserCredential> iniciarSesion({
