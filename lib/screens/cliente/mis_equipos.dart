@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'editar_pc.dart';
 
 import 'registrar_pc.dart';
 
@@ -142,16 +143,36 @@ class MisEquipos extends StatelessWidget {
                         Text('Descripción: ${pc['descripcion']}'),
                       ],
                       const SizedBox(height: 12),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: OutlinedButton.icon(
-                          onPressed: () => eliminar(context, documento.id),
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.redAccent,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          OutlinedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditarPC(
+                                    equipoId: documento.id,
+                                    datos: pc,
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.edit),
+                            label: const Text('Editar'),
                           ),
-                          label: const Text('Eliminar'),
-                        ),
+
+                          const SizedBox(width: 10),
+
+                          OutlinedButton.icon(
+                            onPressed: () => eliminar(context, documento.id),
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.redAccent,
+                            ),
+                            label: const Text('Eliminar'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
