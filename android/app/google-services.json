@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "939944099980-sdr6ei9qi53o6sglpbsm93nfc20fn21a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pc_gamer_service",
+            "certificate_hash": "1084ffd698eefbfa1cb8e7776390752696146cf1"
+          }
+        },
+        {
           "client_id": "939944099980-eckvq0beuaticlk8qdq5t1bbja2es3mi.apps.googleusercontent.com",
           "client_type": 3
         }
