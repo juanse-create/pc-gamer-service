@@ -91,11 +91,15 @@ class _RegistroScreenState extends State<RegistroScreen> {
     }
 
     if (password.length < 8) {
-      return 'La contraseña debe tener al menos 8 caracteres';
+      return 'Debe tener al menos 8 caracteres';
     }
 
-    if (!RegExp(r'[a-zA-Z]').hasMatch(password)) {
-      return 'Incluye al menos una letra';
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      return 'Incluye al menos una letra mayuscula';
+    }
+
+    if (!RegExp(r'[a-z]').hasMatch(password)) {
+      return 'Incluye al menos una letra minuscula';
     }
 
     if (!RegExp(r'[0-9]').hasMatch(password)) {
@@ -153,9 +157,13 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Cuenta creada correctamente. Ahora inicia sesion.'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 4),
+          content: Text(
+            'Cuenta creada. Enviamos un enlace de verificacion '
+            'a tu correo. Verificalo antes de iniciar sesion. '
+            'Revisa tambien spam.',
+          ),
+          backgroundColor: Color.fromARGB(255, 209, 255, 211),
+          duration: Duration(seconds: 7),
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -283,7 +291,8 @@ class _RegistroScreenState extends State<RegistroScreen> {
                     enableSuggestions: false,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
-                      helperText: 'Mínimo 8 caracteres, letras y números',
+                      helperText:
+                          'Mínimo 8 caracteres, mayuscula, minuscula y numero',
                       helperMaxLines: 2,
                       prefixIcon: const Icon(Icons.lock),
                       border: const OutlineInputBorder(),
