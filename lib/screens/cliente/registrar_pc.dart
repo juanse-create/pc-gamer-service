@@ -158,7 +158,7 @@ class _RegistrarPCState extends State<RegistrarPC> {
 
       if (!mounted) return;
 
-      mensaje('PC registrada correctamente en Firebase');
+      mensaje('PC registrada correctamente');
 
       Navigator.pop(context, true);
     } on FirebaseException catch (e) {
@@ -186,19 +186,39 @@ class _RegistrarPCState extends State<RegistrarPC> {
     int lineas = 1,
     String? Function(String?)? validator,
     bool obligatorio = true,
+    IconData icono = Icons.edit_outlined,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 18),
       child: TextFormField(
         controller: controller,
         enabled: !guardando,
         maxLines: lineas,
         maxLength: maximo,
         textCapitalization: TextCapitalization.sentences,
+        style: const TextStyle(color: Colors.white, fontSize: 15),
         decoration: InputDecoration(
           labelText: titulo,
           hintText: ejemplo,
-          border: const OutlineInputBorder(),
+          prefixIcon: Icon(icono, color: const Color(0xFF60A5FA)),
+          filled: true,
+          fillColor: const Color(0xFF0F172A),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 18,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Color(0xFF334155)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Color(0xFF334155)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Color(0xFF3B82F6), width: 2),
+          ),
         ),
         validator:
             validator ??
@@ -229,84 +249,270 @@ class _RegistrarPCState extends State<RegistrarPC> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrar PC Gamer')),
+      appBar: AppBar(
+        title: const Text('Registrar PC Gamer'),
+        backgroundColor: const Color(0xFF1E293B),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: intentoGuardar
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            child: Column(
-              children: [
-                const Icon(Icons.computer, size: 70, color: Colors.blueAccent),
-
-                const SizedBox(height: 20),
-
-                campo(
-                  'Nombre del equipo',
-                  nombre,
-                  ejemplo: 'PC Gamer Principal',
-                  maximo: 60,
-                ),
-
-                campo('Procesador (CPU)', procesador, ejemplo: 'Ryzen 5 5600X'),
-
-                campo(
-                  'Tarjeta gráfica (GPU)',
-                  grafica,
-                  ejemplo: 'RTX 3060 o Integrada',
-                  validator: (valor) => validarTexto(
-                    valor,
-                    nombreCampo: 'la tarjeta gráfica',
-                    minimo: 2,
-                  ),
-                ),
-
-                campo(
-                  'Memoria RAM',
-                  ram,
-                  ejemplo: '16 GB',
-                  maximo: 30,
-                  validator: validarRAM,
-                ),
-
-                campo(
-                  'Almacenamiento',
-                  almacenamiento,
-                  ejemplo: '1 TB NVMe',
-                  validator: validarAlmacenamiento,
-                ),
-
-                campo(
-                  'Descripción',
-                  descripcion,
-                  ejemplo: 'Detalles adicionales del equipo',
-                  maximo: 500,
-                  lineas: 3,
-                  obligatorio: false,
-                ),
-
-                const SizedBox(height: 20),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: guardando ? null : guardar,
-                    icon: const Icon(Icons.save),
-                    label: Text(guardando ? 'Guardando...' : 'Guardar equipo'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(18),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 650),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: intentoGuardar
+                    ? AutovalidateMode.onUserInteraction
+                    : AutovalidateMode.disabled,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFF2563EB),
+                            Color(0xFF1E40AF),
+                            Color(0xFF172554),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: const Column(
+                        children: [
+                          Icon(Icons.computer, size: 65, color: Colors.white),
+                          SizedBox(height: 15),
+                          Text(
+                            'Registra tu equipo',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Agrega las características de tu PC '
+                            'para solicitar servicios de mantenimiento.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white70,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
 
-                if (guardando) ...[
-                  const SizedBox(height: 16),
-                  const CircularProgressIndicator(),
-                ],
-              ],
+                    const SizedBox(height: 25),
+
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E293B),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                color: Colors.blueAccent,
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'Información general',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          campo(
+                            'Nombre del equipo',
+                            nombre,
+                            ejemplo: 'PC Gamer Principal',
+                            maximo: 60,
+                            icono: Icons.drive_file_rename_outline,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E293B),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.memory, color: Colors.blueAccent),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'Componentes de tu PC',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          campo(
+                            'Procesador (CPU)',
+                            procesador,
+                            ejemplo: 'Ryzen 5 5600X',
+                            icono: Icons.memory,
+                          ),
+
+                          campo(
+                            'Tarjeta gráfica (GPU)',
+                            grafica,
+                            ejemplo: 'RTX 3060 o Integrada',
+                            icono: Icons.videogame_asset_outlined,
+                            validator: (valor) => validarTexto(
+                              valor,
+                              nombreCampo: 'la tarjeta gráfica',
+                              minimo: 2,
+                            ),
+                          ),
+
+                          campo(
+                            'Memoria RAM',
+                            ram,
+                            ejemplo: '16 GB',
+                            maximo: 30,
+                            icono: Icons.developer_board,
+                            validator: validarRAM,
+                          ),
+
+                          campo(
+                            'Almacenamiento',
+                            almacenamiento,
+                            ejemplo: '1 TB NVMe',
+                            icono: Icons.storage,
+                            validator: validarAlmacenamiento,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E293B),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.description_outlined,
+                                color: Colors.blueAccent,
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'Información adicional',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          campo(
+                            'Descripción',
+                            descripcion,
+                            ejemplo: 'Detalles adicionales del equipo',
+                            maximo: 500,
+                            lineas: 3,
+                            obligatorio: false,
+                            icono: Icons.notes,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 25),
+
+                    SizedBox(
+                      height: 58,
+                      child: ElevatedButton.icon(
+                        onPressed: guardando ? null : guardar,
+                        icon: Icon(
+                          guardando ? Icons.hourglass_top : Icons.save_outlined,
+                        ),
+                        label: Text(
+                          guardando
+                              ? 'Guardando equipo...'
+                              : 'Registrar equipo',
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2563EB),
+                          foregroundColor: Colors.white,
+                          disabledBackgroundColor: const Color(0xFF334155),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    if (guardando) ...[
+                      const SizedBox(height: 20),
+                      const Center(child: CircularProgressIndicator()),
+                    ],
+
+                    const SizedBox(height: 20),
+
+                    const Text(
+                      'Todos los campos son obligatorios, '
+                      'excepto la descripción.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white54, fontSize: 12),
+                    ),
+
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
